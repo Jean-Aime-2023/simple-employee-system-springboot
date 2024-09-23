@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import EmployeeService from '../services/EmployeeService';
 
 const UpdateEmployee = () => {
     const {id} = useParams();
+    const navigate = useNavigate() 
     const [employee,setEmployee] = useState({
         id: id,
         firstName: '',
@@ -30,6 +31,13 @@ const UpdateEmployee = () => {
     
     const updateEmployee=(e)=>{
        e.preventDefault();
+       EmployeeService.updateEmployee(employee,id)
+       .then((response)=>{
+          navigate("/employeeList") 
+       })
+       .catch((error)=>{
+        console.log(error)
+       })
     }
   return (
 <div className="flex max-w-2xl mx-auto shadow border-b mt-10">
@@ -80,7 +88,7 @@ const UpdateEmployee = () => {
           >
             Update
           </button>
-          <button className="rounded text-white font-semibold bg-red-400 hover:bg-red-700 px-6 py-2">
+          <button onClick={()=>navigate("/employeeList")} className="rounded text-white font-semibold bg-red-400 hover:bg-red-700 px-6 py-2">
             Cancel
           </button>
         </div>
